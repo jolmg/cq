@@ -1,0 +1,37 @@
+#!/bin/bash
+
+csv_assignments=()
+
+while (( $# )); do
+  case $1 in
+    -q)
+      query="$2"
+      shift
+    *)
+      csv_assignments+=("$1")
+    ;;
+  esac
+  shift
+done
+
+(
+  echo ".mode csv"
+  echo ".headers on"
+  for csv_assignment in ${csv_assignments}; do
+    if [[ "$csv_assignment" = *:=* ]]; then
+      table_name="${csv_assignment%%:=*}"
+      file_name="${csv_assignment#*:=}"
+    elif [[ "$csv_assignment" = *=:* ]]; then
+      file_name="${csv_assignment%=:*}"
+      table_name="${csv_assignment##*=:}"
+    else
+      file_name="$csv_assignment"
+      table_name="$(
+        basename <<< "${csv_assignment%.csv}" \
+        | sed 's/[^A-Za-z0-9_]/_/g'
+      )"
+    fi
+    printf ".import %s %s\n" "$file_name" "$table_name"
+    printf "%s\n" "$query"
+  done
+) | sqlite3
