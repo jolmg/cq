@@ -2,6 +2,7 @@
 
 csv_assignments=()
 output_headers=1
+output_mode=csv
 
 while (( $# )); do
   case $1 in
@@ -16,6 +17,10 @@ while (( $# )); do
         output_headers=
       fi
     ;;
+    -m)
+      output_mode="$2"
+      shift
+    ;;
     *)
       csv_assignments+=("$1")
     ;;
@@ -24,7 +29,7 @@ while (( $# )); do
 done
 
 (
-  echo ".mode csv"
+  printf ".mode %s\n" "$output_mode"
   if [[ $output_headers ]]; then
     echo ".headers on"
   fi
