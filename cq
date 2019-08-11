@@ -56,6 +56,9 @@ done
         | sed 's/[^A-Za-z0-9_]/_/g'
       )"
     fi
+    if [[ $file_name = - ]]; then
+      file_name="/proc/$$/fd/0"
+    fi
     printf ".import %s %s\n" "$file_name" "$table_name"
   done
   printf ".mode %s\n" "$output_mode"
