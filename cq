@@ -51,6 +51,6 @@ done
       )"
     fi
     printf ".import %s %s\n" "$file_name" "$table_name"
-    printf "%s\n" "$query"
   done
+  printf "%s\n" "$query"
 ) | sqlite3
