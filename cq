@@ -11,8 +11,8 @@ while (( $# )); do
       shift
     ;;
 
-    [-+]h)
-      if [[ $1 = -* ]]; then
+    [-+]h|--headers|--no-headers)
+      if [[ $1 = -h || $1 = --headers ]]; then
         output_headers=1
       else
         output_headers=
