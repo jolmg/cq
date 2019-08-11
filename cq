@@ -1,12 +1,20 @@
 #!/bin/bash
 
 csv_assignments=()
+output_headers=1
 
 while (( $# )); do
   case $1 in
     -q)
       query="$2"
       shift
+    ;;
+    [-+]h)
+      if [[ $1 = -* ]]; then
+        output_headers=1
+      else
+        output_headers=
+      fi
     ;;
     *)
       csv_assignments+=("$1")
@@ -17,7 +25,9 @@ done
 
 (
   echo ".mode csv"
-  echo ".headers on"
+  if [[ $output_headers ]]; then
+    echo ".headers on"
+  fi
   for csv_assignment in ${csv_assignments}; do
     if [[ "$csv_assignment" = *:=* ]]; then
       table_name="${csv_assignment%%:=*}"
