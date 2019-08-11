@@ -19,7 +19,7 @@ while (( $# )); do
       fi
     ;;
 
-    -m)
+    -o|--output-mode)
       output_mode="$2"
       shift
     ;;
@@ -32,7 +32,7 @@ while (( $# )); do
 done
 
 (
-  printf ".mode %s\n" "$output_mode"
+  printf ".mode %s\n" "csv"
   if [[ $output_headers ]]; then
     echo ".headers on"
   fi
@@ -52,5 +52,6 @@ done
     fi
     printf ".import %s %s\n" "$file_name" "$table_name"
   done
+  printf ".mode %s\n" "$output_mode"
   printf "%s\n" "$query"
 ) | sqlite3
