@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION=1.0.0
+
 csv_assignments=()
 output_headers=1
 input_mode=csv
@@ -62,6 +64,11 @@ while (( $# )); do
     -q|--query)
       query="$2"
       shift
+    ;;
+
+    -v|--version)
+      printf "%s\n" $VERSION
+      exit
     ;;
 
     -h|--help)
