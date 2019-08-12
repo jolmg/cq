@@ -42,7 +42,7 @@ done
   if [[ $output_headers ]]; then
     echo ".headers on"
   fi
-  for csv_assignment in ${csv_assignments}; do
+  for csv_assignment in "${csv_assignments[@]}"; do
     if [[ "$csv_assignment" = *:=* ]]; then
       table_name="${csv_assignment%%:=*}"
       file_name="${csv_assignment#*:=}"
