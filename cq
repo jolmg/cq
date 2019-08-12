@@ -5,11 +5,68 @@ output_headers=1
 input_mode=csv
 output_mode=csv
 
+usage() {
+  cat <<EOF
+Usage:
+  $0 [-H] [-i <input_mode>] [-o <output_mode>] [<table_assignment> ...] [-q <sql_query>]
+
+$0 is a wrapper over sqlite to facilitate ad-hoc querying of relational
+data. table_assignments come in 3 forms:
+  
+  Prefix assignment: <table_name>:=<file_path>
+
+    This particularly useful for when file_path comes from something long
+    like:
+
+      $0 \\
+        t:=<(ssh some_server produce_some_csv) \\
+        t:=<(ssh another_server generate_a_different_csv)
+
+  Suffix Assignment: <file_path>=:<table_name>
+
+    Useful when combined with brace expansion:
+      
+      $0 a/very/deep/path/{long_foo=:f,another/long_bar=:b}
+
+  Implicit Assignment: <file_path>
+
+    Table names will be the result of taking the basename of the path and
+    removing a .csv extension if present. For when you have your ad-hoc
+    "database" in a directory and you just want to glob:
+
+      $0 deep/path/again/*
+
+Option descriptions:
+
+  -H +H --headers --no-headers
+    Indicates sqlite to add or remove the headers from the output. Last
+    takes precedence.
+
+  -i --input-mode
+    Specifies the mode of the input. Supported modes can be seen by
+    running: \`sqlite3 <<< '.help mode'\`
+
+  -o --output-mode
+    Specifies the mode of the output. Supported modes can be seen by
+    running: \`sqlite3 <<< '.help mode'\`
+
+  -q --query
+    Should be the query you want to do on that data. The reason why this is
+    a flag instead of a positional argument is so that it can be put either
+    before or after the table assignments.
+EOF
+}
+
 while (( $# )); do
   case $1 in
     -q|--query)
       query="$2"
       shift
+    ;;
+
+    -h|--help)
+      usage
+      exit
     ;;
 
     [-+]H|--headers|--no-headers)
