@@ -34,7 +34,7 @@ foo,baz
 1,3
 ```
 
-Notice one uses `:=` and the other one is flipped `=:`. The former looks better when combining with <() process expansion:
+Notice one uses `:=` and the other one is flipped `=:`. The former looks better when combining with <() process substitution:
 
 ```
 cq \
