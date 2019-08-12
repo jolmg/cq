@@ -52,7 +52,7 @@ done
     else
       file_name="$csv_assignment"
       table_name="$(
-        basename <<< "${csv_assignment%.csv}" \
+        basename "${csv_assignment%.csv}" \
         | sed 's/[^A-Za-z0-9_]/_/g'
       )"
     fi
