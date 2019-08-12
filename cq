@@ -77,7 +77,7 @@ while (( $# )); do
     ;;
 
     [-+]H|--headers|--no-headers)
-      if [[ $1 = -[nH] || $1 = --headers || $1 = --names ]]; then
+      if [[ $1 = -H || $1 = --headers ]]; then
         output_headers=1
       else
         output_headers=
