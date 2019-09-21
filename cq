@@ -26,7 +26,7 @@ output_mode=csv
 set -e
 
 die() {
-  printf "$@" | awk 1
+  printf "$@" | awk 1 >&2
   exit 1
 }
 
