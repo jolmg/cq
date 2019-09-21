@@ -117,6 +117,10 @@ while (( $# )); do
   shift
 done
 
+if [[ "${#csv_assignments}" -eq 0 ]]; then
+  csv_assignments+=("t:=-")
+fi
+
 (
   printf ".mode %s\n" "$input_mode"
   if [[ $output_headers ]]; then
