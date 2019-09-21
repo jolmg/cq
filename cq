@@ -78,6 +78,13 @@ EOF
 while (( $# )); do
   case $1 in
     -q|--query)
+      query_type=argument
+      query="$2"
+      shift
+    ;;
+
+    -f|--query-file)
+      query_type=file
       query="$2"
       shift
     ;;
@@ -146,5 +153,9 @@ fi
     printf ".import %s %s\n" "$file_name" "$table_name"
   done
   printf ".mode %s\n" "$output_mode"
-  printf "%s\n" "$query"
+  if [[ "$query_type" = argument ]]; then
+    printf "%s\n" "$query"
+  else
+    cat "$query"
+  fi
 ) | sqlite3
