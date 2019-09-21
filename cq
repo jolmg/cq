@@ -131,7 +131,7 @@ while (( $# )); do
   shift
 done
 
-if [[ "${#csv_assignments}" -eq 0 ]]; then
+if [[ "${#csv_assignments[@]}" -eq 0 ]]; then
   csv_assignments+=("t:=-")
 fi
 
@@ -165,7 +165,7 @@ prep="$(
   done
 
   if [[ ! "$query" ]]; then
-    if [[ "${#csv_assignments}" -eq 1 ]]; then
+    if [[ "${#csv_assignments[@]}" -gt 1 ]]; then
       query="select * from ${table_name};"
     else
       die "Error: Multiple tables to load and no query to run. Why?"
