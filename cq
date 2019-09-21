@@ -23,6 +23,13 @@ output_headers=1
 input_mode=csv
 output_mode=csv
 
+set -e
+
+die() {
+  printf "$@" | awk 1
+  exit 1
+}
+
 usage() {
   cat <<EOF
 Usage:
@@ -128,11 +135,13 @@ if [[ "${#csv_assignments}" -eq 0 ]]; then
   csv_assignments+=("t:=-")
 fi
 
-(
+prep="$(
   printf ".mode %s\n" "$input_mode"
+
   if [[ $output_headers ]]; then
     echo ".headers on"
   fi
+
   for csv_assignment in "${csv_assignments[@]}"; do
     if [[ "$csv_assignment" = *:=* ]]; then
       table_name="${csv_assignment%%:=*}"
@@ -147,12 +156,27 @@ fi
         | sed 's/[^A-Za-z0-9_]/_/g'
       )"
     fi
+
     if [[ $file_name = - ]]; then
       file_name="/proc/$$/fd/0"
     fi
+
     printf ".import %s %s\n" "$file_name" "$table_name"
   done
+
+  if [[ ! "$query" ]]; then
+    if [[ "${#csv_assignments}" -eq 1 ]]; then
+      query="select * from ${table_name};"
+    else
+      die "Error: Multiple tables to load and no query to run. Why?"
+    fi
+  fi
+
   printf ".mode %s\n" "$output_mode"
+)"
+
+(
+  printf "%s\n" "$prep"
   if [[ "$query_type" = argument ]]; then
     printf "%s\n" "$query"
   else
