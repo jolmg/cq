@@ -5,7 +5,7 @@
 @test "default query to return input if one or no assignments provided" {
   diff -u \
     <(
-      "$cq" << EOF | tr -d $'\r'
+      cq_f << EOF
 foo,bar
 1,2
 EOF
@@ -18,11 +18,11 @@ EOF
     )
   diff -u \
     <(
-      "$cq" foobar:=<(cat <<EOF
+      cq_f foobar:=<(cat <<EOF
 foo,bar
 1,2
 EOF
-      ) | tr -d $'\r'
+      )
     ) \
     <(
       cat << EOF

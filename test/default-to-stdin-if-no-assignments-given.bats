@@ -5,7 +5,7 @@
 @test "default to stdin if no assignments given" {
   diff -u \
     <(
-      "$cq" -q 'select foo, bar + 10 as bar_2 from t;' << EOF | tr -d $'\r'
+      cq_f -q 'select foo, bar + 10 as bar_2 from t;' << EOF
 foo,bar
 1,2
 EOF
