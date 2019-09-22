@@ -132,7 +132,18 @@ while (( $# )); do
 done
 
 if [[ "${#csv_assignments[@]}" -eq 0 ]]; then
-  csv_assignments+=("t:=-")
+  if [[ -t 0 ]]; then
+    die "%s\n" "$(cat <<EOF
+You haven't provided a CSV to work with and stdin is a terminal. If you
+really want to provide the CSV from the terminal input, you can pipe from
+cat.
+  
+  cat | $0 ...
+EOF
+    )"
+  else
+    csv_assignments+=("t:=-")
+  fi
 fi
 
 prep="$(
