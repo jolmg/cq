@@ -26,7 +26,7 @@ output_mode=csv
 set -e
 
 die() {
-  printf "$@" | awk 1 >&2
+  printf "$0: Error: $1" "${@:2}" | awk 1 >&2
   exit 1
 }
 
@@ -171,7 +171,7 @@ prep="$(
   # only to end everything with an error for not having a query.
   if [[ ! "$query" ]]; then
     if [[ "${#csv_assignments[@]}" -gt 1 ]]; then
-      die "Error: Multiple tables to load and no query to run. Why?"
+      die "Multiple tables to load and no query to run. Why?"
     else
       printf "select * from %s;\n" "$table_name"
     fi
